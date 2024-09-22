@@ -1,0 +1,102 @@
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
+
+plugins {
+    id 'multiloader-loader'
+    id 'net.neoforged.moddev'
+    id 'com.modrinth.minotaur'
+    id 'net.darkhax.curseforgegradle'
+}
+
+sourceSets {
+    data {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+        java {
+
+        }
+    }
+}
+
+configurations {
+    dataCompileClasspath.extendsFrom compileClasspath
+    dataRuntimeClasspath.extendsFrom runtimeClasspath
+}
+
+dependencies {
+    dataImplementation(sourceSets.main.output)
+}
+
+
+neoForge {
+    version = neoforge_version
+    // Automatically enable neoforge AccessTransformers if the file exists
+    def at = project(':common').file('src/main/resources/META-INF/accesstransformer.cfg')
+    if (at.exists()) {
+        accessTransformers.add(at.absolutePath)
+    }
+    parchment {
+        minecraftVersion = parchment_minecraft
+        mappingsVersion = parchment_version
+    }
+    runs {
+        configureEach {
+            systemProperty('neoforge.enabledGameTestNamespaces', mod_id)
+            ideName = "NeoForge ${it.name.capitalize()} (${project.path})" // Unify the run config names with fabric
+        }
+        client {
+            client()
+        }
+        data {
+            data()
+            def existing = rootProject.getProject().project(":common").file("src/main/resources/").path.toString()
+            def output = rootProject.getProject().project(":common").file("src/generated/resources/").path.toString()
+            programArguments.addAll "--all", "--output", output, "--existing", existing, "--mod", mod_id.toString()
+            sourceSet.set(sourceSets.data)
+        }
+        server {
+            server()
+        }
+    }
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.data
+        }
+    }
+}
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}
+
+modrinth {
+    token = findProperty("modrinth.key") ?: "Invalid/No API Token Found"
+    projectId = modrinth_id
+    versionNumber.set(project.version.toString())
+    versionName = "NeoForge ${minecraft_version}"
+    uploadFile.set(tasks.jar)
+    changelog = rootProject.file("changelog.txt").getText("UTF-8")
+    gameVersions.set([minecraft_version])
+    loaders.set(["neoforge"])
+
+    //debugMode = true
+    //https://github.com/modrinth/minotaur#available-properties
+}
+
+tasks.register("publishToCurseForge", TaskPublishCurseForge) {
+    group = "publishing"
+    apiToken = findProperty("curseforge.apitoken") ?: "Invalid/No API Token Found"
+
+    def mainFile = upload(curseforge_id, tasks.jar)
+    mainFile.releaseType = "release"
+    mainFile.addModLoader("NeoForge")
+    mainFile.addGameVersion(minecraft_version)
+    mainFile.addJavaVersion("Java 21")
+    mainFile.changelog = rootProject.file("changelog.txt").getText("UTF-8")
+
+    //debugMode = true
+    //https://github.com/Darkhax/CurseForgeGradle#available-properties
+}

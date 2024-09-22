@@ -1,0 +1,23 @@
+{
+  "toast": {
+    "factory": {
+      "display_once": false,
+      "item": "minecraft:bread",
+      "text": {
+        "color": "dark_gray",
+        "text": "Displays \nToasts!"
+      },
+      "title": {
+        "bold": true,
+        "text": "Toasty"
+      }
+    },
+    "toast_factory": "toasty:simple"
+  },
+  "toast_source": [
+    {
+      "source_id": "toasty:on_login",
+      "targets": ["toasty:on_login"]
+    }
+  ]
+}

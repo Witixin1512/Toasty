@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "package": "net.witixin.toasty.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "refmap": "toasty.refmap.json",
+  "minVersion": "0.8",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+  ],
+  "client": [
+    "ClientPacketListenerMixin",
+    "PlayerDisconnectMixin",
+    "ClientPauseScreenDisconnectMixin"
+  ]
+}

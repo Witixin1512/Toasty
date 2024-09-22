@@ -1,0 +1,16 @@
+{
+  "toasty.edit_screen": "Simple Toast Maker",
+  "toasty.default.toast.title": "Toasty is a nice mod!",
+  "toasty.default.toast.body": "Toasty allows you to make toast like popups... Please don't put ads here!",
+  "toasty.default.toast.showcase": "Showcase",
+  "toasty.default.toast.write_to_disk" : "Write Toast to disk",
+
+  "toasty.screen.error.title_file_exists" : "That file already exists!",
+  "toasty.screen.error.body_file_exists": "Toasty will not overwrite it. Change your file name or delete it yourself.",
+
+  "toasty.screen.success.title" : "Successfully wrote Toast to disk!",
+  "toasty.screen.success.body": "The toast file can be found in the /toasts directory.",
+
+  "toasty.screen.error.title" : "An error occured while saving the Toast",
+  "toasty.screen.error.body" : "Check the log for more details"
+}
